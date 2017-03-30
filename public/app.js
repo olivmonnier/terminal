@@ -59,8 +59,8 @@ function formatTypeLog(type) {
   if (type === 'response') {
     return ''
   } else if (type === 'error') {
-    return '[ERROR]'
+    return '<span class="color-error">[ERROR]</span>'
   } else if (type === 'exit') {
-    return '[exit code]'
+    return '<span class="color-complete">[exit code]</span>'
   }
 }
