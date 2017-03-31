@@ -29,6 +29,7 @@ app.post('/', function(req, res) {
 });
 
 server.listen(8000);
+console.log('Server is ready');
 
 io.on('connection', function(socket) {
   socket.emit('init', { history: HISTORY, process: PROCESS });
