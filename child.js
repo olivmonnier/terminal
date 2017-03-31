@@ -22,7 +22,7 @@ module.exports = function(cmd, io) {
   // Listen for any response from the child:
   child.stdout.on('data', function(data) {
     var date = new Date();
-    var data = { type: 'response', data: ansi_up.ansi_to_html(data.toString('utf8')), date: date.toUTCString() };
+    var data = { type: 'response', data: formatData(data), date: date.toUTCString() };
 
     io.emit('response', data);
     HISTORY.push(data);
@@ -31,7 +31,7 @@ module.exports = function(cmd, io) {
   // Listen for any errors:
   child.stderr.on('data', function(data) {
     var date = new Date();
-    var data = { type: 'error', data: ansi_up.ansi_to_html(data.toString('utf8')), date: date.toUTCString() };
+    var data = { type: 'error', data: formatData(data), date: date.toUTCString() };
 
     io.emit('error', data);
     HISTORY.push(data);
@@ -48,4 +48,8 @@ module.exports = function(cmd, io) {
       return n.id = child.pid;
     });
   });
+}
+
+function formatData(data) {
+  return ansi_up.ansi_to_html(data.toString('utf8'));
 }
