@@ -1,12 +1,15 @@
 var spawn = require('child_process').spawn;
+var ansi_up = require('ansi_up');
+var _ = require('lodash');
 
 module.exports = function(cmd, io) {
   var cmdSplitted = cmd.split(' ');
   var child = spawn(cmd, { shell: true });
   var date = new Date();
-  var data = { type: 'response', data: cmd, date: date.toUTCString() };
+  var data = { type: 'response', data: cmd, date: date.toUTCString(), id: child.pid };
 
   HISTORY.push(data);
+  PROCESS.push({ id: child.pid, data: cmd });
   io.emit('response', data);
 
   if (cmdSplitted[0] === 'cd' && cmdSplitted[1]) {
@@ -19,7 +22,7 @@ module.exports = function(cmd, io) {
   // Listen for any response from the child:
   child.stdout.on('data', function(data) {
     var date = new Date();
-    var data = { type: 'response', data: data.toString('utf8'), date: date.toUTCString() };
+    var data = { type: 'response', data: ansi_up.ansi_to_html(data.toString('utf8')), date: date.toUTCString() };
 
     io.emit('response', data);
     HISTORY.push(data);
@@ -28,7 +31,7 @@ module.exports = function(cmd, io) {
   // Listen for any errors:
   child.stderr.on('data', function(data) {
     var date = new Date();
-    var data = { type: 'error', data: data.toString('utf8'), date: date.toUTCString() };
+    var data = { type: 'error', data: ansi_up.ansi_to_html(data.toString('utf8')), date: date.toUTCString() };
 
     io.emit('error', data);
     HISTORY.push(data);
@@ -37,9 +40,12 @@ module.exports = function(cmd, io) {
   // Listen for an exit event:
   child.on('exit', function(exitCode) {
     var date = new Date();
-    var data = { type: 'exit', data: exitCode, date: date.toUTCString() };
+    var data = { type: 'exit', data: exitCode, date: date.toUTCString(), id: child.pid };
 
     io.emit('exit', data);
     HISTORY.push(data);
+    _.remove(PROCESS, function(n) {
+      return n.id = child.pid;
+    });
   });
 }

@@ -3,9 +3,12 @@ var app = express();
 var server = require('http').Server(app);
 var bodyParser = require('body-parser');
 var io = require('socket.io')(server);
+var execSync = require('child_process').execSync;
 var child = require('./child');
+var isWin = /^win/.test(process.platform);
 
 global.HISTORY = [];
+global.PROCESS = [];
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -28,5 +31,12 @@ app.post('/', function(req, res) {
 server.listen(8000);
 
 io.on('connection', function(socket) {
-  socket.emit('init', HISTORY);
+  socket.emit('init', { history: HISTORY, process: PROCESS });
+  socket.on('killProcess', function(data) {
+    if (isWin) {
+      execSync('taskkill /PID ' + data.id + ' /T /F');
+    } else {
+      process.kill(data.id, 'SIGKILL');
+    }
+  });
 });

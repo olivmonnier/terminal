@@ -3,9 +3,12 @@ var indexInputHistorySelected = null;
 var socket = io.connect('/');
 
 socket.on('init', function(data) {
-  data.forEach(function(log) {
+  data.history.forEach(function(log) {
     showLog(log);
-  })
+  });
+  data.process.forEach(function(proc) {
+    showProcessBadge(proc);
+  });
 });
 ['response', 'error', 'exit'].forEach(function(event) {
   socket.on(event, function(data) {
@@ -17,12 +20,23 @@ socket.on('clear', function() {
   $('#logs .shell-body li').remove();
 });
 
-$(document).ready(function() {
-  onShellFormSubmit();
-  onShellInputKeydown();
+socket.on('response', function(data) {
+  if (data.id) {
+    showProcessBadge(data);
+  }
 });
 
-function onShellFormSubmit() {
+socket.on('exit', function(data) {
+  $('[data-process-id="' + data.id + '"]').remove();
+});
+
+$(document).ready(function() {
+  onSubmitShellForm();
+  onKeydownShellInput();
+  onClickProcessBadge();
+});
+
+function onSubmitShellForm() {
   $(document).on('submit', '#shellForm', function(e) {
     e.preventDefault();
 
@@ -37,7 +51,7 @@ function onShellFormSubmit() {
   });
 }
 
-function onShellInputKeydown() {
+function onKeydownShellInput() {
   $(document).on('keydown', '#logs [name="exec"]', function (e) {
     if (e.which === 38 || e.which === 40) {
       if (e.which === 38) { //UP
@@ -51,8 +65,20 @@ function onShellInputKeydown() {
   });
 }
 
+function onClickProcessBadge() {
+  $(document).on('click', '.process-wrap .badge', function (e) {
+    var pid = $(this).data('process-id');
+
+    socket.emit('killProcess', { id: pid });
+  });
+}
+
 function showLog(log) {
   $('#logs .shell-body').append('<li>[' + log.date + '] ' + formatTypeLog(log.type) + ' - ' + log.data + '</li>');
+}
+
+function showProcessBadge(process) {
+  $('.process-wrap').append('<span class="badge" data-process-id="' + process.id + '">' + process.data + '</span>');
 }
 
 function formatTypeLog(type) {

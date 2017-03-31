@@ -4,7 +4,7 @@ body {
 }
 .shell-wrap {
   width: 600px;
-  margin: 100px auto 0 auto;
+  margin: 100px auto 30px auto;
   box-shadow: 0 0 30px rgba(0,0,0,0.4);
 
   -webkit-border-radius: 3px;
@@ -68,12 +68,33 @@ body {
   left: 0;
   top: 0;
 }
-
 .shell-body li {
   word-wrap: break-word;
   position: relative;
   padding: 0 0 0 15px;
 }
+
+.process-wrap {
+  width: 600px;
+  margin: auto;
+}
+
+.process-wrap .badge {
+  display: inline-block;
+  min-height: 10px;
+  padding: 3px 7px;
+  border: 1px solid #337AB7;
+  border-radius: 10px;
+  color: #337AB7;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .3s ease-out;
+}
+.process-wrap .badge:hover {
+  background-color: #337AB7;
+  color: #fff;
+}
+
 .color-error {
   color: red;
 }
