@@ -3,20 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Terminal</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="logs" class="shell-wrap">
       <p class="shell-top-bar">Terminal</p>
-      <ul class="shell-body"></ul>
+      <div class="shell-body">
+        <ul></ul>
+      </div>
       <form id="shellForm" action="/" method="POST">
         <input type="text" name="exec" autocomplete="off" autofocus/>
       </form>
     </div>
-    <div class="process-wrap"></div>   
-
+    <div class="process-wrap"></div>
+    
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-(function(io, $) {  
+(function(io, $) {
   var socket = io.connect('/');
 
   socket.on('init', function(data) {
@@ -11,7 +11,7 @@
   });
   ['response', 'error', 'exit'].forEach(function(event) {
     socket.on(event, function(data) {
-      showLog(data);
+      if (data) showLog(data);
     });
   });
 
@@ -30,7 +30,13 @@
   });
 
   function showLog(log) {
-    $('#logs .shell-body').append('<li>[' + log.date + '] ' + formatTypeLog(log.type) + ' - ' + log.data + '</li>');
+    const $shellBody = $('#logs .shell-body');
+
+    $shellBody
+      .find('ul')
+      .append('<li>[' + log.date + '] ' + formatTypeLog(log.type) + ' - ' + log.data + '</li>')
+      .parent()
+      .scrollTop($shellBody[0].scrollHeight);
   }
 
   function showProcessBadge(process) {
