@@ -1,12 +1,19 @@
-(function($) {  
+(function($, ace) {
   var inputsHistory = [];
   var indexInputHistorySelected = null;
 
   $(document).ready(function() {
+    initEditor();
     onSubmitShellForm();
     onKeydownShellInput();
     onClickProcessBadge();
   });
+
+  function initEditor() {
+    window.Editor = ace.edit('editor');
+    Editor.setTheme('ace/theme/monokai');
+    Editor.getSession().setMode('ace/mode/javascript');
+  }
 
   function onSubmitShellForm() {
     $(document).on('submit', '#shellForm', function(e) {
@@ -24,7 +31,7 @@
   }
 
   function onKeydownShellInput() {
-    $(document).on('keydown', '#logs [name="exec"]', function (e) {
+    $(document).on('keydown', '#Apps [name="exec"]', function (e) {
       if (e.which === 38 || e.which === 40) {
         if (e.which === 38) { //UP
           if (inputsHistory.length >= 0) indexInputHistorySelected -= 1;
@@ -44,4 +51,4 @@
       socket.emit('killProcess', { id: pid });
     });
   }
-}(jQuery));
+}(jQuery, ace));

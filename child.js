@@ -1,3 +1,4 @@
+var fs = require('fs');
 var spawn = require('child_process').spawn;
 var ansi_up = require('ansi_up');
 var _ = require('lodash');
@@ -17,6 +18,10 @@ module.exports = function(cmd, io) {
   } else if (cmdSplitted[0] === 'cls' || cmdSplitted[0] === 'clear') {
     io.emit('clear');
     HISTORY = new Array();
+  } else if (cmdSplitted[0] === 'edit') {
+    var fileContent = fs.readFileSync(cmdSplitted[1], 'utf8');
+
+    io.emit('fileEdit', { data: fileContent });
   }
 
   // Listen for any response from the child:

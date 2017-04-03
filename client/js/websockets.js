@@ -22,7 +22,7 @@
   });
 
   socket.on('clear', function() {
-    $('#logs .shell-body li').remove();
+    $('#App .shell-body li').remove();
   });
 
   socket.on('response', function(data) {
@@ -35,8 +35,13 @@
     $('[data-process-id="' + data.id + '"]').remove();
   });
 
+  socket.on('fileEdit', function(data) {
+    Editor.setValue(data.data, -1);
+    $('#editor').addClass('in');
+  });
+
   function showLog(log) {
-    var $shellBody = $('#logs .shell-body');
+    var $shellBody = $('#App .shell-body');
 
     $shellBody
       .find('ul')

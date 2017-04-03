@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="main.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="/ace/ace.js"></script>
   </head>
   <body>
-    <div id="logs" class="shell-wrap">
-      <p class="shell-top-bar">Terminal</p>
+    <div id="App" class="shell-wrap">
+      <div class="shell-top-bar">Terminal</div>
+      <div id="editor"></div>
       <div class="shell-body">
         <ul></ul>
       </div>
@@ -18,7 +20,7 @@
       </form>
     </div>
     <div class="process-wrap"></div>
-    
+
     <script src="app.js"></script>
   </body>
 </html>

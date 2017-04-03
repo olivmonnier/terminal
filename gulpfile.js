@@ -31,6 +31,11 @@ gulp.task('seq:js', () => {
   runSequence('babelify', 'uglify:js')
 });
 
+gulp.task('vendors:ace', () => {
+  return gulp.src('node_modules/ace-builds/src-min-noconflict/**/*')
+    .pipe(gulp.dest('public/ace/'));
+});
+
 gulp.task('sass', () => {
   return gulp.src('client/sass/main.scss')
     .pipe(sass().on('error', sass.logError))
@@ -51,7 +56,7 @@ gulp.task('seq:css', () => {
 });
 
 gulp.task('build', () => {
-  runSequence(['seq:css', 'seq:js']);
+  runSequence(['seq:css', 'seq:js', 'vendors:ace']);
 });
 
 gulp.task('dev', ['build'], () => {
@@ -61,7 +66,7 @@ gulp.task('dev', ['build'], () => {
 
   gulp.watch('client/sass/**/*.scss', ['seq:css']);
   gulp.watch('client/js/**/*.js', ['seq:js']);
-  
+
   gulp.watch(['client/js/**/*.js', 'client/sass/**/*.scss'], function(file) {
     server.notify.apply(server, [file]);
   });
