@@ -21,7 +21,7 @@ module.exports = function(cmd, io) {
   } else if (cmdSplitted[0] === 'edit') {
     var fileContent = fs.readFileSync(cmdSplitted[1], 'utf8');
 
-    io.emit('fileEdit', { data: fileContent });
+    io.emit('fileEdit', { data: fileContent, path: cmdSplitted[1] });
   }
 
   // Listen for any response from the child:

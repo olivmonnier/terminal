@@ -37,7 +37,9 @@
 
   socket.on('fileEdit', function(data) {
     Editor.setValue(data.data, -1);
-    $('#editor').addClass('in');
+    $('#editor')
+      .attr('data-path', data.path)
+      .addClass('in');
   });
 
   function showLog(log) {
