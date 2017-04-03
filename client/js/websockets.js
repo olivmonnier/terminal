@@ -9,8 +9,14 @@
       showProcessBadge(proc);
     });
   });
+
   ['response', 'error', 'exit'].forEach(function(event) {
     socket.on(event, function(data) {
+      if (data instanceof Error) {
+        var date = new Date();
+
+        return showLog({ type: 'error', data, date: date.toUTCString() });
+      }
       if (data) showLog(data);
     });
   });
@@ -30,7 +36,7 @@
   });
 
   function showLog(log) {
-    const $shellBody = $('#logs .shell-body');
+    var $shellBody = $('#logs .shell-body');
 
     $shellBody
       .find('ul')
